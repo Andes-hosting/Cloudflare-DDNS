@@ -1,0 +1,105 @@
+#!/bin/bash
+
+auth_email=$AUTH_EMAIL                                # The email used to login 'https://dash.cloudflare.com'
+auth_method=$AUTH_METHOD                              # Set to "global" for Global API Key or "token" for Scoped API Token
+auth_key=$AUTH_KEY                                    # Your API Token or Global API Key
+ttl="3600"                                            # Set the DNS TTL (seconds)
+proxy=$PROXY                                          # Set the proxy to true or false
+
+zone_identifier_1=$ZONE_ID_1                          # Can be found in the "Overview" tab of your domain
+record_name_1=$RECORD_NAME_1                          # Which record you want to be synced
+zone_identifier_2=$ZONE_ID_2                          # Can be found in the "Overview" tab of your domain
+record_name_2=$RECORD_NAME_2                          # Which record you want to be synced
+zone_identifier_3=$ZONE_ID_3                          # Can be found in the "Overview" tab of your domain
+record_name_3=$RECORD_NAME_3                          # Which record you want to be synced
+zone_identifier_4=$ZONE_ID_4                          # Can be found in the "Overview" tab of your domain
+record_name_4=$RECORD_NAME_4                          # Which record you want to be synced
+zone_identifier_5=$ZONE_ID_5                          # Can be found in the "Overview" tab of your domain
+record_name_5=$RECORD_NAME_5                          # Which record you want to be synced
+zone_identifier_6=$ZONE_ID_6                          # Can be found in the "Overview" tab of your domain
+record_name_6=$RECORD_NAME_6                          # Which record you want to be synced
+zone_identifier_7=$ZONE_ID_7                          # Can be found in the "Overview" tab of your domain
+record_name_7=$RECORD_NAME_7                          # Which record you want to be synced
+zone_identifier_8=$ZONE_ID_8                          # Can be found in the "Overview" tab of your domain
+record_name_8=$RECORD_NAME_8                          # Which record you want to be synced
+zone_identifier_9=$ZONE_ID_9                          # Can be found in the "Overview" tab of your domain
+record_name_9=$RECORD_NAME_9                          # Which record you want to be synced
+zone_identifier_10=$ZONE_ID_10                        # Can be found in the "Overview" tab of your domain
+record_name_10=$RECORD_NAME_10                        # Which record you want to be synced
+
+declare -a all_records=("$record_name_1" "$record_name_2" "$record_name_3" "$record_name_4" "$record_name_5" "$record_name_6" "$record_name_7" "$record_name_8" "$record_name_9" "$record_name_10")
+declare -a all_zones=("$zone_identifier_1" "$zone_identifier_2" "$zone_identifier_3" "$zone_identifier_4" "$zone_identifier_5" "$zone_identifier_6" "$zone_identifier_7" "$zone_identifier_8" "$zone_identifier_9" "$zone_identifier_10")
+
+howMany=${#all_records[@]}
+for ((i=0;i<${howMany};i++))
+do
+  if [ "${all_records[$i]}" != "example.com" ]
+  then
+###########################################
+## Check if we have a public IP
+###########################################
+    ip=$(curl -s https://api.ipify.org || curl -s https://ipv4.icanhazip.com/)
+
+    if [ "${ip}" == "" ]; then
+      logger -s "DDNS Updater: No public IP found"
+      exit 1
+    fi
+
+###########################################
+## Check and set the proper auth header
+###########################################
+    if [ "${auth_method}" == "global" ]; then
+      auth_header="X-Auth-Key:"
+    else
+      auth_header="Authorization: Bearer"
+    fi
+
+###########################################
+## Seek for the A record
+###########################################
+
+    logger "DDNS Updater: Check Initiated"
+    record=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/${all_zones[$i]}/dns_records?type=A&name=${all_records[$i]}" \
+                          -H "X-Auth-Email: $auth_email" \
+                          -H "$auth_header $auth_key" \
+                          -H "Content-Type: application/json")
+
+###########################################
+## Check if the domain has an A record
+###########################################
+
+    if [[ $record == *"\"count\":0"* ]]; then
+      logger -s "DDNS Updater: Record does not exist, perhaps create one first? (${ip} for ${all_records[$i]})"
+      exit 1
+    fi
+
+###########################################
+## Get existing IP
+###########################################
+
+    old_ip=$(echo "$record" | sed -E 's/.*"content":"(([0-9]{1,3}\.){3}[0-9]{1,3})".*/\1/')
+    # Compare if they're the same
+    if [[ $ip == $old_ip ]]; then
+      logger "DDNS Updater: IP ($ip) for ${all_records[$i]} has not changed."
+    else
+
+###########################################
+## Set the record identifier from result
+###########################################
+
+      record_identifier=$(echo "$record" | sed -E 's/.*"id":"(\w+)".*/\1/')
+
+###########################################
+## Change the IP@Cloudflare using the API
+###########################################
+
+      update=$(curl -s -X PATCH "https://api.cloudflare.com/client/v4/zones/${all_zones[$i]}/dns_records/$record_identifier" \
+                           -H "X-Auth-Email: $auth_email" \
+                           -H "$auth_header $auth_key" \
+                           -H "Content-Type: application/json" \
+                    --data "{\"type\":\"A\",\"name\":\"${all_records[$i]}\",\"content\":\"$ip\",\"ttl\":\"$ttl\",\"proxied\":${proxy}}")
+    fi
+
+
+  fi
+done
