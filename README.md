@@ -10,8 +10,8 @@ The primary purpose of this image is to assist you when self-hosting your own se
 ## How to Use
 
 To get started, clone this repository and use the following command to build the image and run it as a container:
-```
-docker-compose up -d --build
+```shell
+docker compose up -d --build
 ```
 By doing this, the container will be up and running, and your IP will be updated for as many domains as needed.
 
