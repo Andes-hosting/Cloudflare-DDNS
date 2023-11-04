@@ -1,7 +1,7 @@
 # docker compose up -d --build
 # docker compose down -v --remove-orphans
 
-version: '3'
+version: '3.9'
 
 services:
   cloudflare:
@@ -12,9 +12,11 @@ services:
     container_name: cf_cloudflare
     restart: always
     environment:
+      REFRESH: $REFRESH #1 (in minutes)
       AUTH_EMAIL: $AUTH_EMAIL #admin@example.com
       AUTH_METHOD: $AUTH_METHOD #token/global
       AUTH_KEY: $AUTH_KEY #1234asdf
+      TTL: $TTL #3600
       PROXY: $PROXY #true/false
       ZONE_ID_1: $ZONE_ID_1 #1234asdf
       RECORD_NAME_1: $RECORD_NAME_1 #example.com

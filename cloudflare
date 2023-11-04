@@ -3,7 +3,7 @@
 auth_email=$AUTH_EMAIL                                # The email used to login 'https://dash.cloudflare.com'
 auth_method=$AUTH_METHOD                              # Set to "global" for Global API Key or "token" for Scoped API Token
 auth_key=$AUTH_KEY                                    # Your API Token or Global API Key
-ttl="3600"                                            # Set the DNS TTL (seconds)
+ttl=$TTL                                              # Set the DNS TTL (seconds)
 proxy=$PROXY                                          # Set the proxy to true or false
 
 zone_identifier_1=$ZONE_ID_1                          # Can be found in the "Overview" tab of your domain
