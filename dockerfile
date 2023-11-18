@@ -2,8 +2,7 @@ FROM alpine:3.15.0
 
 RUN apk add --no-cache curl bash
 
-ENV REFRESH=1 \
-    AUTH_EMAIL="admin@example.com" \
+ENV AUTH_EMAIL="admin@example.com" \
     AUTH_METHOD="global" \
     AUTH_KEY="1234567890asdfghjkl" \
     TTL="3600" \
