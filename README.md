@@ -11,6 +11,8 @@ The primary purpose of this image is to assist you when self-hosting your own se
 
 To use this container we assume that you already have a Cloudflare account and you have already bought a custom domain. And your intention is to set up a dynamic IP address to your custom domain using Cloudflare as DNS.
 
+Also, it is important to note that this image is not intended to create new DNS records, only update them, so if you need to add new ones, you must first create them manually and then add them to this container's environment. Otherwise, you will see an error message in the container logs.
+
 ## How to use (Build)
 
 To get started, clone this repository and use the following command to build the image and run it as a container:
