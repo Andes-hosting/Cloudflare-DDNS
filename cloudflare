@@ -33,6 +33,7 @@ declare -a all_zones=("$zone_identifier_1" "$zone_identifier_2" "$zone_identifie
 ###########################################
 ## Check if we have a public IP
 ###########################################
+
 ip=$(curl -s https://api.ipify.org || curl -s https://ipv4.icanhazip.com/)
 
 if [ "${ip}" == "" ]; then
@@ -40,10 +41,10 @@ if [ "${ip}" == "" ]; then
   exit 1
 fi
 
-
 ###########################################
 ## Run for each domain other than example.com (Which is the default when the domain is not set)
 ###########################################
+
 howMany=${#all_records[@]}
 for ((i=0;i<${howMany};i++))
 do
@@ -53,6 +54,7 @@ then
 ###########################################
 ## Check and set the proper auth header
 ###########################################
+
   if [ "${auth_method}" == "global" ]; then
     auth_header="X-Auth-Key:"
   else
@@ -107,7 +109,6 @@ then
     logger -s "DDNS Updater: The domain ${all_records[$i]} has changed from $old_ip to $ip"
 
   fi
-
 
   fi
 done

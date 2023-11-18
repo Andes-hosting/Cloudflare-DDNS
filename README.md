@@ -5,7 +5,7 @@ This container is built with Alpine Linux and is based on the [cloudflare-ddns-u
 
 ## Purpose
 
-The primary purpose of this image is to assist you when self-hosting your own server without a static IP from your internet provider. By using this container, you can avoid future problems caused by IP address changes. The container will automatically update your public IP to your free Cloudflare account through the DDNS API.
+The primary purpose of this image is to assist you when self-hosting your own server without a static IP from your internet provider. By using this container, you can avoid future problems caused by IP address changes. The container will automatically update your public IP to your free Cloudflare account through the DDNS API every minute.
 
 ## Asumptions
 
@@ -34,7 +34,6 @@ services:
     image: leadvic/cloudflare_ddns:latest
     restart: always
     environment:
-      REFRESH: 1 #1 (This number is in minutes, where min is 1 and max is 60)
       AUTH_EMAIL: your-email@mail.com #admin@example.com
       AUTH_METHOD: global #token/global
       AUTH_KEY: this_is_a_super_long_token #1234asdf
@@ -55,7 +54,6 @@ In most cases you will use all of the environment variables and set them as show
 - RECORD_NAME_1
 
 And the rest of the environment variables will be set as default as follows:
-- REFRESH: 1
 - AUTH_METHOD: global
 - TTL: 3600
 - PROXY: true

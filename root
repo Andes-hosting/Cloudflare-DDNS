@@ -1,1 +1,1 @@
-*/$REFRESH * * * * /bin/bash /bin/cloudflare
+* * * * * /bin/bash /bin/cloudflare
