@@ -9,7 +9,7 @@ The primary purpose of this image is to assist you when self-hosting your own se
 
 ## Asumptions
 
-To use this container we assume that you already have a Cloudflare account and you have already bought a custom domain. And you intention is to set up a dynamic IP address to your custom domain using Cloudflare as DNS.
+To use this container we assume that you already have a Cloudflare account and you have already bought a custom domain. And your intention is to set up a dynamic IP address to your custom domain using Cloudflare as DNS.
 
 ## How to use (Build)
 
