@@ -12,11 +12,11 @@ services:
     container_name: cf_cloudflare
     restart: always
     environment:
-      REFRESH: $REFRESH #1 (in minutes)
+      REFRESH: $REFRESH #1 (This number is in minutes, where min is 1 and max is 60)
       AUTH_EMAIL: $AUTH_EMAIL #admin@example.com
       AUTH_METHOD: $AUTH_METHOD #token/global
       AUTH_KEY: $AUTH_KEY #1234asdf
-      TTL: $TTL #3600
+      TTL: $TTL #3600 (This number is in seconds, where min is 60 and max is 86400)
       PROXY: $PROXY #true/false
       ZONE_ID_1: $ZONE_ID_1 #1234asdf
       RECORD_NAME_1: $RECORD_NAME_1 #example.com
