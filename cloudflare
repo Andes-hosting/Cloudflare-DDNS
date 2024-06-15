@@ -106,8 +106,21 @@ then
                           -H "Content-Type: application/json" \
                   --data "{\"type\":\"A\",\"name\":\"${all_records[$i]}\",\"content\":\"$ip\",\"ttl\":$ttl,\"proxied\":${proxy}}")
 
-    logger -s "DDNS Updater: The domain ${all_records[$i]} has changed from $old_ip to $ip"
+###########################################
+## Check if the update was successful
+###########################################
 
+    success=$(echo $update | grep -o '"success":true')
+    
+###########################################
+## Log the result of the change of ip
+###########################################
+    if [ "$success" == '"success":true' ]; then
+        logger -s "DDNS Updater: The domain ${all_records[$i]} has changed from $old_ip to $ip successfully."
+    else
+        error_message=$(echo $update | grep -o '"message":"[^"]*' | sed 's/"message":"//')
+        logger -s "DDNS Updater: Failed to update the domain ${all_records[$i]} from $old_ip to $ip. Error: $error_message"
+    fi
   fi
 
   fi
