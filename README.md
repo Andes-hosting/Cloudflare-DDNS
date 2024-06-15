@@ -23,7 +23,7 @@ By doing this, the container will be up and running, and your IP will be updated
 
 ## How to use (Docker Compose)
 
-If you prefer to use a docker compose instead you can use the following docker image in [DockerHub](https://hub.docker.com/r/leadvic/cloudflare_ddns)
+If you prefer to use a docker compose instead you can use the docker image from this repository.
 
 Here is an example of a docker-compose.yml you can use to set this container working
 ```yaml
@@ -31,7 +31,7 @@ version: '3.9'
 
 services:
   cloudflare:
-    image: leadvic/cloudflare_ddns:latest
+    image: ghcr.io/andes-hosting/cloudflare-ddns:latest
     restart: always
     environment:
       AUTH_EMAIL: your-email@mail.com #admin@example.com
