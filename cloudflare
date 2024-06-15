@@ -104,7 +104,7 @@ then
                           -H "X-Auth-Email: $auth_email" \
                           -H "$auth_header $auth_key" \
                           -H "Content-Type: application/json" \
-                  --data "{\"type\":\"A\",\"name\":\"${all_records[$i]}\",\"content\":\"$ip\",\"ttl\":\"$ttl\",\"proxied\":${proxy}}")
+                  --data "{\"type\":\"A\",\"name\":\"${all_records[$i]}\",\"content\":\"$ip\",\"ttl\":$ttl,\"proxied\":${proxy}}")
 
     logger -s "DDNS Updater: The domain ${all_records[$i]} has changed from $old_ip to $ip"
 
